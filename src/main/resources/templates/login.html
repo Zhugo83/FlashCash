@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header>
+
+</header>
+<main>
+    <article>
+        <form th:action="@{/login}" method="post">
+            <label for="email">Your email?</label>
+            <input type="email" id="email" name="email" placeholder="JohnDoe@example.com" required>
+            <label for="password">Your password?</label>
+            <input type="password" name="password" id="password" required>
+            <!-- <button onclick="showPassword()">See password</button>-->
+            <button type="submit" class="submit-btn">Login</button>
+        </form>
+    </article>
+</main>
+<footer>
+
+</footer>
+</body>
+<script>
+    function showPassword() {
+        let x = document.getElementById("password");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+</script>
+</html>
