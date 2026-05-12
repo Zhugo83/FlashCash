@@ -2,44 +2,45 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
+    <meta charset="utf-8">
+    <title>Register</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
 <header>
 
 </header>
-<main>
-    <article>
-        <form th:action="@{/register}" method="post">
-            <label for="firstname">Your email?</label>
-            <input type="text" id="firstname" name="firstname" placeholder="John" required>
-            <label for="lastname">Your email?</label>
-            <input type="text" id="lastname" name="lastname" placeholder="Doe" required>
-            <label for="email">Your email?</label>
-            <input type="email" id="email" name="email" placeholder="JohnDoe@example.com" required>
-            <label for="password">Your password?</label>
-            <input type="password" name="password" id="password" required>
-            <label for="confirmpassword">Confirm password</label>
-            <input type="password" name="confirmpassword" id="confirmpassword">
-            <!-- <button onclick="showPassword()">See password</button>-->
-            <button type="submit" class="submit-btn">Login</button>
+<body>
+    <article id="register">
+        <h2>Account creation page.</h2>
+        <form th:action="@{/register}" th:object="${registerDTO}" method="post">
+            <label for="firstName">What's your first name?</label>
+            <input type="text" th:field="${registerDTO.firstName}" id="firstName" placeholder="John">
+            <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
+
+            <label for="lastName">What's your last name?</label>
+            <input type="text" th:field="${registerDTO.lastName}" id="lastName" placeholder="Doe">
+            <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
+
+            <label for="email">What's your email?</label>
+            <input type="text" th:field="${registerDTO.email}" id="email" placeholder="JohnDoe@example.com">
+            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+
+            <label for="password">What's your password?</label>
+            <input type="password" th:field="${registerDTO.password}" id="password">
+            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+
+            <label for="confirmPassword">Confirm the password?</label>
+            <input type="password" th:field="${registerDTO.confirmPassword}" id="confirmPassword">
+            <p th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></p>
+
+
+            <a href="/login">Login instead?</a>
+            <input type="submit" value="Create account">
+
         </form>
     </article>
-</main>
+</body>
 <footer>
 
 </footer>
-</body>
-<script>
-    function showPassword() {
-        let x = document.getElementById("password");
-        if (x.type === "password") {
-            x.type = "text";
-        } else {
-            x.type = "password";
-        }
-    }
-</script>
 </html>

@@ -1,10 +1,8 @@
 package org.example.flashcash.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,15 +14,21 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
+@Getter
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotBlank(message = "First name is mandatory")
     private String firstName;
+    @NotBlank(message = "Last name is mandatory")
     private String lastName;
     @Column(unique = true)
+    @NotBlank(message = "Email is required and unique")
     private String email;
+    @NotBlank(message = "Password is also required")
     private String password;
     @ManyToMany
     private List<Link> links;

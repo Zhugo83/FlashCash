@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -23,38 +24,20 @@ public class SecurityConfig {
 
     private final UserRepository userRepository;
 
-
-    private final String[] AUTH_WHITELIST = {
-            "/h2-console/**",
-            "/css/**",
-            "/images/**"
-    };
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                //.csrf(AbstractHttpConfigurer::disable)
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**")
-                )
-                .headers(headers->headers
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
-                )
-                .authorizeHttpRequests(req -> req
-                        .requestMatchers(AUTH_WHITELIST)
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated()
+        return http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/register").permitAll()
+                        .requestMatchers("/logout").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form->form
-                        .loginPage("/login")
-                        .usernameParameter("email")
-                        .passwordParameter("password")
-                        .defaultSuccessUrl("/index", true)
-                        .permitAll()
-                );
-
-        return http.build();
+                        .defaultSuccessUrl("/", true)
+                )
+                .logout(config -> config.logoutSuccessUrl("/login"))
+                .build();
     }
 
     @Bean
@@ -85,13 +68,6 @@ public class SecurityConfig {
             userRepository.save(user);
             userRepository.save(admin);
         };
-    }
-
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> (org.springframework.security.core.userdetails.UserDetails) userRepository.findUserByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User with email" + username + " not found"));
     }
 
     @Bean

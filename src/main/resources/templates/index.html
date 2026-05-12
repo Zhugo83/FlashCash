@@ -1,18 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<style>
+    *{
+    padding: 0px;
+    margin: 0px;
+    }
+    header{
+        display: flex;
+        background-color: darkblue;
+        color: white;
+        border-radius: 0px 0px 15px 15px;
+        box-shadow: 0px 5px 5px black;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        span{
+            font-size: 32px;
+        }
+        span:nth-child(3){
+            text-decoration: underline;
+        }
+        a {
+            color:white;
+        }
+        > nav {
+          ul {
+                list-style-type: none;
+            }
+        }
+        img {
+            padding: 30px;
+        }
+        li{
+            padding: 5px;
+        }
+    }
+.hidden{
+    display:none;
+}
+
+main{
+    margin: 25px auto auto auto;
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+}
+button{
+    margin: auto;
+    padding: 15px;
+    color: blue;
+}
+main span{
+   text-align: center;
+   font-size: 36px;
+}
+.green{
+    color: green;
+}
+.red{
+    color: red;
+}
+footer{
+    position: fixed;
+    bottom: 0px;
+}
+</style>
 <body>
 <header>
-
+    <article>
+        <a href="/"><img src="/images/logo.png" alt="Logo"></a>
+        <span id="welcomeMessage"></span>
+        <span th:remove="tag" sec:authentication="firstName">Example</span>
+    </article>
+    <nav>
+        <ul>
+            <li><a href="/transfer" th:href="@{/tranfer}">Give money to someone</a></li>
+            <li><a href="/contact">Add a contact</a></li>
+            <li>
+                <form th:action="@{/logout}" method="post">
+                    <input type="submit" value="Sign Out"/>
+                </form>
+            </li>
+        </ul>
+    </nav>
 </header>
 <main>
-    <h1>HELLO THIS IS THE MAIN PAGE!</h1>
+    <button onclick="viewAmount()" id="buttonAmount">View amount</button>
+    <span class="hidden green" id="amount">500.00€</span>
+
+    <button onclick="viewTransaction()" id="buttonTransaction">View transaction</button>
+    <span class="hidden" id="transaction">
+        <ul>
+            <li><span class="green">+ 500.00</span><span>€ from bank (06/05/2026 at 14:02)</span></li>
+            <li><span class="red">- 500.00</span><span>€ to bank (06/05/2026 at 14:02)</span></li>
+        </ul>
+
+    </span>
 </main>
 <footer>
-
+<p>FLASH CASH 2026 PROJECT / INDEX.HTML</p>
 </footer>
 </body>
+<script>
+    function randomWelcomeMessage() {
+        let randomWelcome = ["Welcome", "Hello", "Good day to you", "Hi"]
+        const random = Math.floor(Math.random() * randomWelcome.length);
+        document.getElementById("welcomeMessage").innerHTML += randomWelcome[random] + " ";
+    }
+    function viewTransaction() {
+        if (document.getElementById("transaction").classList.contains('hidden') ) {
+            document.getElementById("transaction").classList.remove('hidden');
+            document.getElementById("buttonTransaction").innerHTML = "Hide transaction";
+        } else {
+           document.getElementById("transaction").classList.add('hidden');
+           document.getElementById("buttonTransaction").innerHTML = "View transaction";
+        }
+    }
+
+    function viewAmount() {
+        if (document.getElementById("amount").classList.contains('hidden') ) {
+            document.getElementById("amount").classList.remove('hidden');
+            document.getElementById("buttonAmount").innerHTML = "Hide amount";
+        } else {
+           document.getElementById("amount").classList.add('hidden');
+            document.getElementById("buttonAmount").innerHTML = "View amount";
+        }
+    }
+
+    randomWelcomeMessage()
+</script>
 </html>
