@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class SecurityConfig {
 
     private final UserRepository userRepository;
 
-    @Bean
+    /*@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
@@ -38,6 +40,33 @@ public class SecurityConfig {
                 )
                 .logout(config -> config.logoutSuccessUrl("/login"))
                 .build();
+    }*/
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                //.csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/h2-console/**")
+                )
+                .headers(headers->headers
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
+                )
+                .authorizeHttpRequests(req -> req
+                        .requestMatchers("/login", "/register")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated()
+                )
+                .formLogin(form->form
+                        .loginPage("/login")
+                        .usernameParameter("email")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/", true)
+                        .permitAll()
+                );
+
+        return http.build();
     }
 
     @Bean
@@ -46,9 +75,6 @@ public class SecurityConfig {
         account.setIban("TestIbanUser");
         account.setAmount(0.0);
 
-        UserAccount account2 = new UserAccount();
-        account2.setIban("TestIbanAdmin");
-        account2.setAmount(0.0);
         return args -> {
             User user = User.builder()
                     .firstName("User")
@@ -57,17 +83,15 @@ public class SecurityConfig {
                     .password(passwordEncoder().encode("password"))
                     .account(account)
                     .build();
-            User admin = User.builder()
-                    .firstName("Admin")
-                    .lastName("Super")
-                    .email("admin@example.com")
-                    .password(passwordEncoder().encode("password"))
-                    .account(account2)
-                    .build();
 
             userRepository.save(user);
-            userRepository.save(admin);
         };
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(){
+        return username -> userRepository.findUserByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with email" + username + " not found"));
     }
 
     @Bean

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6" lang="">
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -75,7 +74,7 @@ footer{
     <article>
         <a href="/"><img src="/images/logo.png" alt="Logo"></a>
         <span id="welcomeMessage"></span>
-        <span th:remove="tag" sec:authentication="firstName">Example</span>
+        <span th:text="${user.firstName}">Example</span>
     </article>
     <nav>
         <ul>
@@ -91,7 +90,7 @@ footer{
 </header>
 <main>
     <button onclick="viewAmount()" id="buttonAmount">View amount</button>
-    <span class="hidden green" id="amount">500.00€</span>
+    <span class="hidden green" id="amount" th:text="${user.account.amount}">500.00€</span>
 
     <button onclick="viewTransaction()" id="buttonTransaction">View transaction</button>
     <span class="hidden" id="transaction">

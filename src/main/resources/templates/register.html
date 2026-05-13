@@ -1,41 +1,111 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <title>Register</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
+<style>
+    *{
+margin: 0px;
+padding: 0px;
+}
+
+form > input:nth-child(n+3){
+border-radius: 50px 0px;
+}
+
+input{
+margin: auto;
+margin-bottom: 15px;
+width: 150px;
+text-align: center;
+border: 2px solid black;
+padding: 10px;
+border-radius: 0px 50px;
+color: white;
+background-color:gray;
+transition: width 0.75s;
+}
+
+input:focus{
+border: 2px solid white;
+transition: width 1.5s, box-shadow 3s, border 2s;
+width: 250px;
+outline: none;
+box-shadow: 0 0 10px white;
+}
+
+form > label:nth-child(n+3){
+border-radius: 0px 50px;
+}
+
+label{
+display: block;
+text-align: center;
+margin: auto;
+width: 250px;
+border-radius: 15px;
+border: 2px solid white;
+padding: 10px;
+border-radius: 50px 0px;
+padding: 10px;
+color: white;
+background-color:gray;
+}
+
+button{
+border: 2px solid black;
+padding: 10px;
+border-radius: 50px 50px;
+}
+
+form{
+display: flex;
+flex-direction: column;
+}
+
+
+article{
+background-color: darkorchid;
+padding: 15px;
+max-width: 300px;
+margin: 5px auto auto auto;
+border-radius: 10px;
+}
+
+.hidden {
+display:none;
+}
+</style>
 <header>
 
 </header>
 <body>
     <article id="register">
         <h2>Account creation page.</h2>
-        <form th:action="@{/register}" th:object="${registerDTO}" method="post">
+        <form th:action="@{/register}" method="post">
             <label for="firstName">What's your first name?</label>
-            <input type="text" th:field="${registerDTO.firstName}" id="firstName" placeholder="John">
-            <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
+            <input type="text" name="firstName" id="firstName" placeholder="John">
 
             <label for="lastName">What's your last name?</label>
-            <input type="text" th:field="${registerDTO.lastName}" id="lastName" placeholder="Doe">
-            <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
+            <input type="text" name="lastName" id="lastName" placeholder="Doe">
 
             <label for="email">What's your email?</label>
-            <input type="text" th:field="${registerDTO.email}" id="email" placeholder="JohnDoe@example.com">
-            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+            <input type="text" name="email" id="email" placeholder="JohnDoe@example.com">
 
             <label for="password">What's your password?</label>
-            <input type="password" th:field="${registerDTO.password}" id="password">
-            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+            <input type="password" name="password" id="password">
 
+            <!-- TODO: Make a confirm password, cause right now thymeleaf does not want to cooperate
             <label for="confirmPassword">Confirm the password?</label>
-            <input type="password" th:field="${registerDTO.confirmPassword}" id="confirmPassword">
-            <p th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></p>
+            <input type="password" id="confirmPassword">
+            -->
 
 
             <a href="/login">Login instead?</a>
-            <input type="submit" value="Create account">
+            <button type="submit">Create account</button>
 
         </form>
     </article>
@@ -43,4 +113,22 @@
 <footer>
 
 </footer>
+<script>
+    function checkPassword(form) {
+        password1 = form.password.value;
+        password2 = form.confirmPassword.value;
+
+        if (password1 == '')
+            alert("Please enter Password");
+        else if (password2 == '')
+            alert("Please enter confirm password");
+        else if (password1 != password2) {
+            alert("Password did not match: Please try again...")
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+</script>
 </html>

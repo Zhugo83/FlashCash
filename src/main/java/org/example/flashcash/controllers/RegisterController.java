@@ -1,8 +1,8 @@
 package org.example.flashcash.controllers;
 
 import jakarta.validation.Valid;
-import org.example.flashcash.model.DTO.RegisterDTO;
 import org.example.flashcash.model.User;
+import org.example.flashcash.model.UserAccount;
 import org.example.flashcash.repository.UserRepository;
 import org.example.flashcash.services.UserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,24 +26,17 @@ public class RegisterController {
 
     @GetMapping("/register")
     public String addUser(Model model) {
-        RegisterDTO registerDTO = new RegisterDTO();
-        model.addAttribute(registerDTO);
+        User user = new User();
+        model.addAttribute(user);
         return "register";
     }
 
     @PostMapping("/register")
-    public String validate(Model model, @Valid @ModelAttribute RegisterDTO registerDTO, BindingResult result) {
-        if (!registerDTO.getPassword().equals(registerDTO.getConfirmPassword())){
+    public String validate(Model model, @Valid @ModelAttribute User user, BindingResult result) {
+        Optional<User> userExist = userService.findUserByEmail(new User().getEmail());
+        if (userExist.isPresent()) {
             result.addError(
-                    new FieldError("registerDTO", "confirmPassword",
-                            "Passwords do not match!")
-            );
-        }
-
-        Optional<User> user = userService.findUserByEmail(registerDTO.getEmail());
-        if (user.isPresent()) {
-            result.addError(
-                    new FieldError("registerDTO", "email",
+                    new FieldError("user", "email",
                             "Email already exists!")
             );
         }
@@ -54,19 +47,23 @@ public class RegisterController {
 
         try {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            UserAccount account = new UserAccount();
+            account.setIban("");
+            account.setAmount(0.0);
 
             User newUser = new User();
-            newUser.setFirstName(registerDTO.getFirstName());
-            newUser.setLastName(registerDTO.getLastName());
-            newUser.setEmail(registerDTO.getEmail());
-            newUser.setPassword(encoder.encode(registerDTO.getPassword()));
+            newUser.setFirstName(user.getFirstName());
+            newUser.setLastName(user.getLastName());
+            newUser.setEmail(user.getEmail());
+            newUser.setPassword(encoder.encode(user.getPassword()));
+            newUser.setAccount(account);
 
             userService.save(newUser);
 
-            model.addAttribute("registerDTO", new RegisterDTO());
+            model.addAttribute("user", new User());
         } catch (Exception ex) {
             result.addError(
-                    new FieldError("registerDTO", "firstName"
+                    new FieldError("user", "firstName"
                     , ex.getMessage())
             );
         }

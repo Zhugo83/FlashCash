@@ -1,11 +1,83 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+<style>
+    *{
+margin: 0px;
+padding: 0px;
+}
+
+form > input:nth-child(n+3){
+border-radius: 50px 0px;
+}
+
+input{
+margin: auto;
+margin-bottom: 15px;
+width: 150px;
+text-align: center;
+border: 2px solid black;
+padding: 10px;
+border-radius: 0px 50px;
+color: white;
+background-color:gray;
+transition: width 0.75s;
+}
+
+input:focus{
+border: 2px solid white;
+transition: width 1.5s, box-shadow 3s, border 2s;
+width: 250px;
+outline: none;
+box-shadow: 0 0 10px white;
+}
+
+form > label:nth-child(n+3){
+border-radius: 0px 50px;
+}
+
+label{
+display: block;
+text-align: center;
+margin: auto;
+width: 250px;
+border-radius: 15px;
+border: 2px solid white;
+padding: 10px;
+border-radius: 50px 0px;
+padding: 10px;
+color: white;
+background-color:gray;
+}
+
+button{
+border: 2px solid black;
+padding: 10px;
+border-radius: 50px 50px;
+}
+
+form{
+display: flex;
+flex-direction: column;
+}
+
+
+article{
+background-color: darkorchid;
+padding: 15px;
+max-width: 300px;
+margin: 5px auto auto auto;
+border-radius: 10px;
+}
+
+.hidden {
+display:none;
+}
+</style>
 <body>
 <header>
 
@@ -13,16 +85,14 @@
 <main>
     <article id="login">
         <h2>Logging page.</h2>
-        <form th:action="@{/login}" th:object="${loginDTO}" method="post">
+        <form th:action="@{/login}" method="post">
             <label for="email">Your email?</label>
-            <input type="text" th:field="${loginDTO.email}" id="email" placeholder="JohnDoe@example.com">
-            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+            <input type="text" id="email" placeholder="JohnDoe@example.com" name="email">
             <label for="password">Your password?</label>
-            <input type="password" th:field="${loginDTO.password}" id="password">
-            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+            <input type="password" id="password" name="password">
 
             <!-- <button onclick="showPassword()">See password</button>-->
-            <input type="submit" value="Login">
+            <button type="submit">Login</button>
         </form>
         <a href="/register">Registering instead?</a>
     </article>

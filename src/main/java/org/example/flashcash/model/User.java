@@ -21,9 +21,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotBlank(message = "First name is mandatory")
     private String firstName;
-    @NotBlank(message = "Last name is mandatory")
     private String lastName;
     @Column(unique = true)
     @NotBlank(message = "Email is required and unique")
@@ -42,7 +40,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return "";
+        return this.email;
     }
 
     @Override
