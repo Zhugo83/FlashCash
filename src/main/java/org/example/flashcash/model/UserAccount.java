@@ -21,12 +21,12 @@ public class UserAccount {
     private Double amount;
     private String iban;
 
-    public UserAccount plus(double amount) {
+    public UserAccount plus(Double amount) {
         this.amount += amount;
         return this;
     }
 
-    public UserAccount minus(double amount) {
+    public UserAccount minus(Double amount) {
         this.amount -= amount;
         return this;
     }

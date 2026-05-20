@@ -92,14 +92,15 @@ footer{
     <button onclick="viewAmount()" id="buttonAmount">View amount</button>
     <span class="hidden green" id="amount" th:text="${user.account.amount}">500.00€</span>
 
-    <button onclick="viewTransaction()" id="buttonTransaction">View transaction</button>
-    <span class="hidden" id="transaction">
-        <ul>
-            <li><span class="green">+ 500.00</span><span>€ from bank (06/05/2026 at 14:02)</span></li>
-            <li><span class="red">- 500.00</span><span>€ to bank (06/05/2026 at 14:02)</span></li>
-        </ul>
+    <form th:action="@{/addmoney}" method="post">
+        <label for="amount">add amount?</label>
+        <input type="number" placeholder="2" name="amount">
+        <label for="accountId">To who?</label>
+        <input type="number" id="accountId" name="accountId">
 
-    </span>
+        <!-- <button onclick="showPassword()">See password</button>-->
+        <button type="submit">Add money</button>
+    </form>
 </main>
 <footer>
 <p>FLASH CASH 2026 PROJECT / INDEX.HTML</p>
@@ -110,15 +111,6 @@ footer{
         let randomWelcome = ["Welcome", "Hello", "Good day to you", "Hi"]
         const random = Math.floor(Math.random() * randomWelcome.length);
         document.getElementById("welcomeMessage").innerHTML += randomWelcome[random] + " ";
-    }
-    function viewTransaction() {
-        if (document.getElementById("transaction").classList.contains('hidden') ) {
-            document.getElementById("transaction").classList.remove('hidden');
-            document.getElementById("buttonTransaction").innerHTML = "Hide transaction";
-        } else {
-           document.getElementById("transaction").classList.add('hidden');
-           document.getElementById("buttonTransaction").innerHTML = "View transaction";
-        }
     }
 
     function viewAmount() {

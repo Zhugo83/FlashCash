@@ -1,23 +1,23 @@
 package org.example.flashcash.controllers;
 
 import org.example.flashcash.model.User;
+import org.example.flashcash.model.UserAccount;
+import org.example.flashcash.services.UserAccountService;
 import org.example.flashcash.services.UserService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class UserController {
-    private final UserService userService;
+    private final UserAccountService userAccountService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserAccountService userAccountService) {
+        this.userAccountService = userAccountService;
     }
 
     // to be used for admin pannel.
@@ -27,4 +27,22 @@ public class UserController {
     //    model.addAttribute("users", userService.findAll());
     //    return "user/list";
     //}
+
+    @PostMapping("/addmoney")
+    public String addmoney(@Valid @ModelAttribute UserAccount userAccount, BindingResult result){
+        if (result.hasErrors()) {
+            System.out.println("Something bad happened");
+            return "redirect:/";
+        }
+        System.out.println(userAccount);
+        UserAccount wheremoneygo = userAccountService.findById(userAccount.getAccountId());
+
+        if (userAccount.getAmount() > 0){
+            wheremoneygo.plus(userAccount.getAmount());
+        } else {
+            wheremoneygo.minus(userAccount.getAmount());
+        }
+        userAccountService.save(wheremoneygo);
+        return "redirect:/";
+    }
 }

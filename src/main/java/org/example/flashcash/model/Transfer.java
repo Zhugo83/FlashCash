@@ -19,5 +19,4 @@ public class Transfer {
     private User to;
     private Double amountBeforeTax;
     private Double amountAfterTax;
-
 }
