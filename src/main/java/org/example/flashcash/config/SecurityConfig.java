@@ -2,6 +2,7 @@ package org.example.flashcash.config;
 
 import lombok.RequiredArgsConstructor;
 import org.example.flashcash.model.UserAccount;
+import org.example.flashcash.repository.UserAccountRepository;
 import org.example.flashcash.repository.UserRepository;
 import org.example.flashcash.model.User;
 import org.springframework.boot.CommandLineRunner;
@@ -17,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.sql.Array;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -25,6 +28,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     private final UserRepository userRepository;
+    private final UserAccountRepository userAccountRepository;
 
     /*@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

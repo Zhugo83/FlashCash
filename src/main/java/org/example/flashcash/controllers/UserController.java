@@ -28,8 +28,8 @@ public class UserController {
     //    return "user/list";
     //}
 
-    @PostMapping("/addmoney")
-    public String addmoney(@Valid @ModelAttribute UserAccount userAccount, BindingResult result){
+    @PostMapping("/addiban")
+    public String addiban(@Valid @ModelAttribute UserAccount userAccount, BindingResult result){
         if (result.hasErrors()) {
             System.out.println("Something bad happened");
             return "redirect:/";
@@ -37,11 +37,21 @@ public class UserController {
         System.out.println(userAccount);
         UserAccount wheremoneygo = userAccountService.findById(userAccount.getAccountId());
 
+        // boolean iban = userAccountService.findExistingIban();
+        //if (iban){
+        //    System.out.println("Iban already exists");
+        //    return "redirect:/";
+        //}
+
+        // TESTING
         if (userAccount.getAmount() > 0){
             wheremoneygo.plus(userAccount.getAmount());
         } else {
             wheremoneygo.minus(userAccount.getAmount());
         }
+
+        wheremoneygo.setIban(userAccount.getIban());
+        
         userAccountService.save(wheremoneygo);
         return "redirect:/";
     }

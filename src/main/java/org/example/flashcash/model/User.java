@@ -3,6 +3,8 @@ package org.example.flashcash.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.example.flashcash.validation.FieldsMatch;
+import org.example.flashcash.validation.StrongPass;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @Getter
+@FieldsMatch(first = "password", second = "confirmPassword")
 public class User implements UserDetails {
 
     @Id
@@ -27,7 +30,9 @@ public class User implements UserDetails {
     @NotBlank(message = "Email is required and unique")
     private String email;
     @NotBlank(message = "Password is also required")
+    @StrongPass
     private String password;
+    private String confirmPassword;
     @ManyToMany
     private List<Link> links;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
