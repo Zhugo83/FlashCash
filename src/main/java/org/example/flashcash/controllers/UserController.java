@@ -28,6 +28,19 @@ public class UserController {
     //    return "user/list";
     //}
 
+    @PostMapping("/transfer")
+    public String transfer(@Valid @ModelAttribute UserAccount userAccount, BindingResult result){
+        if (result.hasErrors()) {
+            System.out.println("Something bad happened");
+            return "redirect:/";
+        }
+        System.out.println(userAccount);
+        // Get both ibans then remove amount from one and add to the other with the 0.5% for moving money
+        
+        //userAccountService.save();
+        return "redirect:/";
+    }
+
     @PostMapping("/addiban")
     public String addiban(@Valid @ModelAttribute UserAccount userAccount, BindingResult result){
         if (result.hasErrors()) {
@@ -51,7 +64,7 @@ public class UserController {
         }
 
         wheremoneygo.setIban(userAccount.getIban());
-        
+
         userAccountService.save(wheremoneygo);
         return "redirect:/";
     }

@@ -39,6 +39,7 @@ public class HomeController {
         UserAccount userAccount = userAccountService.findById(user.getId());
         user.setAccount(userAccount);
         model.addAttribute(user);
+        model.addAttribute(userAccount);
         return "/index";
     }
 

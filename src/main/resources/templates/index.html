@@ -94,11 +94,23 @@ footer{
 
     <form th:action="@{/addiban}" method="post">
         <input type="number" th:value="${user.id}" name="accountId">
-        <label for="amount">add amount?</label>
-        <input type="number" placeholder="THIS IS FOR TESTING" name="amount">
         <label>Iban?</label>
-        <select th:each="value: ${user.account.iban}" name="iban">
-            <option th:value="TestIbanUser">TestIbanUser</option>
+        <input type="text" name="iban">
+
+        <!-- <button onclick="showPassword()">See password</button>-->
+        <button type="submit">Add money</button>
+    </form>
+
+    <form th:action="@{/tranfer}" method="post">
+        <input type="number" th:value="${user.id}" name="accountId">
+        <select th:each="value: ${userAccount}" name="iban">
+            <option th:value="${value.iban}" th:text="${value.iban}"></option>
+        </select>
+        <label for="amount">Amount to transfer</label>
+        <input type="number" placeholder="" name="amount">
+        <label>Iban?</label>
+        <select th:each="value: ${userAccount}" name="iban">
+            <option th:value="${value.iban}" th:text="${value.iban}"></option>
         </select>
 
         <!-- <button onclick="showPassword()">See password</button>-->
