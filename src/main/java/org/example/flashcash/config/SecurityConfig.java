@@ -78,6 +78,9 @@ public class SecurityConfig {
         UserAccount account = new UserAccount();
         account.setIban("TestIbanUser");
         account.setAmount(0.0);
+        UserAccount account2 = new UserAccount();
+        account2.setIban("TestIbanUser2");
+        account2.setAmount(0.0);
 
         return args -> {
             User user = User.builder()
@@ -89,6 +92,16 @@ public class SecurityConfig {
                     .build();
 
             userRepository.save(user);
+
+            User user2 = User.builder()
+                    .firstName("User2")
+                    .lastName("Normal2")
+                    .email("user2@example.com")
+                    .password(passwordEncoder().encode("password"))
+                    .account(account2)
+                    .build();
+
+            userRepository.save(user2);
         };
     }
 
